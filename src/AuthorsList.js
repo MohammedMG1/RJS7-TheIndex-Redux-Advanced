@@ -3,24 +3,13 @@ import React, { Component } from "react";
 // Components
 import AuthorCard from "./AuthorCard";
 import SearchBar from "./SearchBar";
+import { connect } from "react-redux";
+
 
 class AuthorsList extends Component {
-  state = {
-    filteredAuthors: this.props.authors
-  };
-
-  filterAuthors = query => {
-    query = query.toLowerCase();
-    let filteredAuthors = this.props.authors.filter(author => {
-      return `${author.first_name} ${author.last_name}`
-        .toLowerCase()
-        .includes(query);
-    });
-    this.setState({ filteredAuthors });
-  };
 
   render() {
-    const authorCards = this.state.filteredAuthors.map(author => (
+    const authorCards = this.props.filteredAuthors.map(author => (
       <AuthorCard key={author.id} author={author} />
     ));
 
@@ -34,4 +23,10 @@ class AuthorsList extends Component {
   }
 }
 
-export default AuthorsList;
+const mapSateToPrpps = state => {
+  return {
+    filteredAuthors: state.rootAuthors.filteredAuthors
+  };
+};
+
+export default connect(mapSateToPrpps)(AuthorsList);
